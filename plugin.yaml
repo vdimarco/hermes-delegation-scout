@@ -2,7 +2,7 @@ name: delegation-scout
 version: "1.0.0"
 description: "Delegation backend that routes subagents by task shape and learns from recorded outcomes."
 homepage: https://github.com/vdimarco/hermes-delegation-scout
-requires_hermes: ">=0.22.0"
+requires_hermes: ">=0.22.5"
 provides_tools:
   - scout_stats
 provides_hooks:
