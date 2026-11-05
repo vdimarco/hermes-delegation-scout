@@ -43,3 +43,25 @@ def test_handler_returns_summary_json():
 def test_handler_on_empty_db():
     out = json.loads(build_tool()["handler"]())
     assert out == {"routes_total": 0, "per_route": {}, "last_decisions": []}
+
+
+def test_scout_stats_accepts_positional_args_dict(monkeypatch, tmp_path):
+    """The Hermes tool bridge forwards the arguments dict POSITIONALLY.
+
+    Regression test: scout_stats(**kwargs) failed live with 'takes 0
+    positional arguments but 1 was given'.
+    """
+    from scout import stats_tool
+    from plugins import plugin_storage
+
+    import sqlite3
+
+    monkeypatch.setattr(
+        plugin_storage, "plugin_db", lambda name: sqlite3.connect(tmp_path / f"{name}.db")
+    )
+    # Calls the handler exactly as the bridge does: positional dict, kwargs empty.
+    out = stats_tool.scout_stats({})
+    import json as _json
+
+    parsed = _json.loads(out)
+    assert isinstance(parsed, dict)

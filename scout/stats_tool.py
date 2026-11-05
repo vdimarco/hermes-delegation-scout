@@ -17,8 +17,12 @@ DESCRIPTION = (
 )
 
 
-def scout_stats(**kwargs: Any) -> str:
-    """Schema: no arguments. Returns the stats summary as pretty-printed JSON."""
+def scout_stats(args=None, **kwargs: Any) -> str:
+    """Schema: no arguments. Returns the stats summary as pretty-printed JSON.
+
+    The Hermes tool bridge forwards the arguments dict positionally, so the
+    handler must accept (args=None, **kwargs) — matching every other provider
+    tool in the repo (e.g. hermes-screenpipe's handlers)."""
     from plugins.plugin_storage import plugin_db
 
     stats = Stats(plugin_db(PLUGIN_DB_NAME))
