@@ -137,9 +137,10 @@ class Stats:
             {"task_hash": h, "label": label, "provider": provider, "model": model,
              "ts": ts, "status": status}
             for h, label, provider, model, ts, status in self.conn.execute(
-                "SELECT r.task_hash, r.label, r.provider, r.model, r.ts, o.status "
-                "FROM routes r LEFT JOIN outcomes o ON o.route_id = r.id "
-                "ORDER BY r.id DESC LIMIT ?", (last,),
+                "SELECT r.task_hash, r.label, r.provider, r.model, r.ts, "
+                "(SELECT o.status FROM outcomes o WHERE o.route_id = r.id "
+                " ORDER BY o.rowid DESC LIMIT 1) "
+                "FROM routes r ORDER BY r.id DESC LIMIT ?", (last,),
             ).fetchall()
         ]
         return {
