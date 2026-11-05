@@ -18,3 +18,6 @@ except ImportError:  # plain-module import (pytest collects this dir as a packag
 
 def register(ctx):
     ctx.register_delegation_provider(ScoutProvider())
+    from .scout import observe  # import inside register: keeps probe/loading cheap
+
+    ctx.register_hook("post_tool_call", observe.observe_delegate_task)
